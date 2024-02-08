@@ -60,6 +60,7 @@ class WelcomeView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(60.0),
             child: Column(
+              // do i need this?
               mainAxisSize: MainAxisSize.min,
               children: [
                 ElevatedButton(
