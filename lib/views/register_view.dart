@@ -2,28 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/text_constants.dart';
 import 'package:mq_safety_first/templates/auth_template.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class RegisterView extends StatefulWidget {
+  const RegisterView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _RegisterViewState extends State<RegisterView> {
+  late final TextEditingController _name;
   late final TextEditingController _email;
   late final TextEditingController _password;
+  late final TextEditingController _confirmPassword;
 
   @override
   void initState() {
+    _name = TextEditingController();
     _email = TextEditingController();
     _password = TextEditingController();
+    _confirmPassword = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
+    _name.dispose();
     _email.dispose();
     _password.dispose();
+    _confirmPassword.dispose();
     super.dispose();
   }
 
@@ -31,15 +37,17 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AuthTemplate(
-        viewTitle: login,
-        buttonTitle: login,
-        textButtonTitle: forgotPassword,
-        showNameField: false,
+        viewTitle: register,
+        buttonTitle: register,
+        textButtonTitle: returnToLogin,
+        showNameField: true,
+        nameFieldController: _name,
         showEmailField: true,
         emailFieldController: _email,
         showPasswordField: true,
         passwordFieldController: _password,
-        showConfirmPasswordField: false,
+        showConfirmPasswordField: true,
+        confirmPasswordFieldController: _confirmPassword,
       ),
     );
   }

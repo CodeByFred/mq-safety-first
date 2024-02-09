@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mq_safety_first/config/color_constants.dart';
+import 'package:mq_safety_first/views/forgot_password_view.dart';
 import 'package:mq_safety_first/views/login_view.dart';
+import 'package:mq_safety_first/views/register_view.dart';
 import 'package:mq_safety_first/views/welcome_view.dart';
 
 void main() {
@@ -16,10 +19,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: red),
         useMaterial3: true,
       ),
-      home: const LoginView(),
+      home: const ForgotPasswordView(),
     );
   }
 }

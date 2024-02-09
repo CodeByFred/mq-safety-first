@@ -9,6 +9,7 @@ const passwordReset = "Reset Password";
 const forgotPassword = 'Forgot Password';
 const cancel = 'Cancel';
 const returnToLogin = 'Return to Login';
+const fullName = 'Full Name';
 
 
 

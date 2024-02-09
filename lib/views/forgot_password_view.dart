@@ -2,28 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/text_constants.dart';
 import 'package:mq_safety_first/templates/auth_template.dart';
 
-class LoginView extends StatefulWidget {
-  const LoginView({super.key});
+class ForgotPasswordView extends StatefulWidget {
+  const ForgotPasswordView({super.key});
 
   @override
-  State<LoginView> createState() => _LoginViewState();
+  State<ForgotPasswordView> createState() => _ForgotPasswordViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _ForgotPasswordViewState extends State<ForgotPasswordView> {
   late final TextEditingController _email;
-  late final TextEditingController _password;
 
   @override
   void initState() {
     _email = TextEditingController();
-    _password = TextEditingController();
     super.initState();
   }
 
   @override
   void dispose() {
     _email.dispose();
-    _password.dispose();
     super.dispose();
   }
 
@@ -31,14 +28,13 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: AuthTemplate(
-        viewTitle: login,
-        buttonTitle: login,
-        textButtonTitle: forgotPassword,
+        viewTitle: forgotPassword,
+        buttonTitle: passwordReset,
+        textButtonTitle: cancel,
         showNameField: false,
         showEmailField: true,
         emailFieldController: _email,
-        showPasswordField: true,
-        passwordFieldController: _password,
+        showPasswordField: false,
         showConfirmPasswordField: false,
       ),
     );
