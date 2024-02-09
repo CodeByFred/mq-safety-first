@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "574872754111",
+    "project_id": "mq-safety-first",
+    "storage_bucket": "mq-safety-first.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574872754111:android:0f38da738657795b19730a",
+        "android_client_info": {
+          "package_name": "com.mrmalodorous.mq_safety_first"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIXwRNjLCUroogQUFZ_gTj-z4diUYeOIs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
