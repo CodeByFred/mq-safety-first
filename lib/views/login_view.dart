@@ -1,6 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/text_constants.dart';
 import 'package:mq_safety_first/templates/auth_template.dart';
+
+import '../config/color_constants.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -40,8 +43,33 @@ class _LoginViewState extends State<LoginView> {
         showPasswordField: true,
         passwordFieldController: _password,
         showConfirmPasswordField: false,
-        onPressedLBB: () => Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', (route) => false),
+        onPressedLBB: () async {
+          final email = _email.text;
+          final password = _password.text;
+          FirebaseAuth.instance.currentUser?.reload();
+          final bool verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+          print(verified);
+          if (verified) {
+            await FirebaseAuth.instance.signInWithEmailAndPassword(
+              email: email,
+              password: password,
+            );
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/home', (route) => false);
+          } else if (!verified) {
+            print('not verified');
+            showDialog(
+                context: context,
+                builder: (context) => AlertDialog(backgroundColor: white, surfaceTintColor: white,
+                      title: const Text('Invalid Credentials'),
+                      actions: <Widget>[
+                        TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'))
+                      ],
+                    ));
+          }
+        },
         onPressedATB: () => Navigator.of(context)
             .pushNamedAndRemoveUntil('/forgotPassword', (route) => false),
       ),

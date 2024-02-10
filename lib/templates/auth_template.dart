@@ -8,6 +8,7 @@ import 'package:mq_safety_first/templates/email_text_field.dart';
 import 'package:mq_safety_first/templates/full_name_text_field.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
 import 'package:mq_safety_first/templates/password_text_field.dart';
+import 'package:mq_safety_first/templates/verify_text.dart';
 
 import '../config/color_constants.dart';
 import '../config/curve_constants.dart';
@@ -26,6 +27,8 @@ class AuthTemplate extends StatelessWidget {
   final TextEditingController? confirmPasswordFieldController;
   final VoidCallback onPressedLBB;
   final VoidCallback onPressedATB;
+  final bool showVerifyTextWidget;
+  final Widget? verifyTextWidget;
 
   const AuthTemplate({
     super.key,
@@ -42,6 +45,8 @@ class AuthTemplate extends StatelessWidget {
     this.confirmPasswordFieldController,
     required this.onPressedLBB,
     required this.onPressedATB,
+    this.showVerifyTextWidget = false,
+    this.verifyTextWidget,
   });
 
   @override
@@ -120,6 +125,7 @@ class AuthTemplate extends StatelessWidget {
                     padding: EdgeInsets.fromLTRB(
                         containerWidth, containerHeight, containerWidth, 0),
                     child: Column(children: [
+                      if (showVerifyTextWidget) const VerifyText(),
                       if (showNameField)
                         FullNameTextField(
                           controller: nameController,
@@ -155,7 +161,8 @@ class AuthTemplate extends StatelessWidget {
                 children: [
                   LargeBottomButton(
                       buttonTitle: buttonTitle, onPressedLBB: onPressedLBB),
-                  AuthTextButton(buttonTitle: textButtonTitle, onPressed: onPressedATB),
+                  AuthTextButton(
+                      buttonTitle: textButtonTitle, onPressed: onPressedATB),
                 ],
               ),
             ),

@@ -13,7 +13,7 @@ class LargeBottomButton extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressedLBB,
       style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-          fixedSize: const Size(220, 35),
+          fixedSize: const Size(260, 35),
           foregroundColor: Colors.white,
           backgroundColor: brightRed),
       child: Text(

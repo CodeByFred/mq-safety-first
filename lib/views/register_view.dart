@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/text_constants.dart';
 import 'package:mq_safety_first/templates/auth_template.dart';
@@ -39,7 +40,7 @@ class _RegisterViewState extends State<RegisterView> {
       body: AuthTemplate(
         viewTitle: register,
         buttonTitle: register,
-        textButtonTitle: returnToLogin,
+        textButtonTitle: goToLogin,
         showNameField: true,
         nameFieldController: _name,
         showEmailField: true,
@@ -48,8 +49,38 @@ class _RegisterViewState extends State<RegisterView> {
         passwordFieldController: _password,
         showConfirmPasswordField: true,
         confirmPasswordFieldController: _confirmPassword,
-        onPressedLBB: () => Navigator.of(context)
-            .pushNamedAndRemoveUntil('/home', (route) => false),
+        onPressedLBB: () async {
+          final name = _name.text;
+          final email = _email.text;
+          final password = _password.text;
+          final confirmPassword = _confirmPassword.text;
+
+          if (password == confirmPassword && name.isNotEmpty) {
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+              email: email,
+              password: password,
+            );
+
+            await FirebaseAuth.instance.currentUser?.updateDisplayName(name);
+
+            await FirebaseAuth.instance.currentUser?.sendEmailVerification();
+
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil('/verify', (route) => false);
+          } else {
+            showDialog(
+              context: context,
+              builder: (context) =>
+                  AlertDialog(title: Text('Invalid Entry'), actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.pop(context, 'Go Back'),
+                  child: Text('Cancel'),
+                )
+              ]),
+            );
+          }
+
+        },
         onPressedATB: () => Navigator.of(context)
             .pushNamedAndRemoveUntil('/login', (route) => false),
       ),

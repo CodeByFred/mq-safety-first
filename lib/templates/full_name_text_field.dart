@@ -19,6 +19,7 @@ class _FullNameTextFieldState extends State<FullNameTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      // ADD COMMENT
       controller: widget.controller,
       enableSuggestions: false,
       autocorrect: false,

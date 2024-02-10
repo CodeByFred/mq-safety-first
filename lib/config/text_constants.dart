@@ -8,8 +8,10 @@ const confirmPassword = 'Confirm Password';
 const passwordReset = "Reset Password";
 const forgotPassword = 'Forgot Password';
 const cancel = 'Cancel';
-const returnToLogin = 'Return to Login';
+const goToLogin = 'Already Registered?';
 const fullName = 'Full Name';
-
+const verifyEmail = 'Verify Email';
+const proceedToLogin = "Proceed to Login";
+const resendVerification = 'Resend Verification Email';
 
 
