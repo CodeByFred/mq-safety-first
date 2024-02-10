@@ -5,18 +5,19 @@ class WelcomeButton extends StatelessWidget {
   final Color textColor;
   final Color buttonColor;
   final String buttonText;
+  final VoidCallback onPressed;
 
   const WelcomeButton({
     super.key,
     required this.textColor,
     required this.buttonColor,
-    required this.buttonText,
+    required this.buttonText, required this.onPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),

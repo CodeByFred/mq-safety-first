@@ -48,6 +48,10 @@ class _RegisterViewState extends State<RegisterView> {
         passwordFieldController: _password,
         showConfirmPasswordField: true,
         confirmPasswordFieldController: _confirmPassword,
+        onPressedLBB: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (route) => false),
+        onPressedATB: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil('/login', (route) => false),
       ),
     );
   }

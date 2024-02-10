@@ -35,7 +35,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
         showEmailField: true,
         emailFieldController: _email,
         showPasswordField: false,
-        showConfirmPasswordField: false,
+        showConfirmPasswordField: false, onPressedLBB: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil('/home', (route) => false), onPressedATB: () => Navigator.of(context)
+          .pushNamedAndRemoveUntil('/welcome', (route) => false),
       ),
     );
   }

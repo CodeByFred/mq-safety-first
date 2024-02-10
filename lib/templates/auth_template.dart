@@ -24,6 +24,8 @@ class AuthTemplate extends StatelessWidget {
   final TextEditingController? passwordFieldController;
   final bool showConfirmPasswordField;
   final TextEditingController? confirmPasswordFieldController;
+  final VoidCallback onPressedLBB;
+  final VoidCallback onPressedATB;
 
   const AuthTemplate({
     super.key,
@@ -38,6 +40,8 @@ class AuthTemplate extends StatelessWidget {
     this.passwordFieldController,
     required this.showConfirmPasswordField,
     this.confirmPasswordFieldController,
+    required this.onPressedLBB,
+    required this.onPressedATB,
   });
 
   @override
@@ -51,11 +55,11 @@ class AuthTemplate extends StatelessWidget {
     final TextEditingController nameController =
         nameFieldController ?? TextEditingController();
     final TextEditingController emailController =
-        nameFieldController ?? TextEditingController();
+        emailFieldController ?? TextEditingController();
     final TextEditingController passwordController =
-        nameFieldController ?? TextEditingController();
+        passwordFieldController ?? TextEditingController();
     final TextEditingController confirmPasswordController =
-        nameFieldController ?? TextEditingController();
+        confirmPasswordFieldController ?? TextEditingController();
 
     return SingleChildScrollView(
       child: Column(
@@ -149,8 +153,9 @@ class AuthTemplate extends StatelessWidget {
               child: Column(
                 // mainAxisSize: MainAxisSize.max,
                 children: [
-                  LargeBottomButton(buttonTitle: buttonTitle),
-                  AuthTextButton(buttonTitle: textButtonTitle),
+                  LargeBottomButton(
+                      buttonTitle: buttonTitle, onPressedLBB: onPressedLBB),
+                  AuthTextButton(buttonTitle: textButtonTitle, onPressed: onPressedATB),
                 ],
               ),
             ),

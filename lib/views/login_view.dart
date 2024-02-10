@@ -40,6 +40,10 @@ class _LoginViewState extends State<LoginView> {
         showPasswordField: true,
         passwordFieldController: _password,
         showConfirmPasswordField: false,
+        onPressedLBB: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil('/home', (route) => false),
+        onPressedATB: () => Navigator.of(context)
+            .pushNamedAndRemoveUntil('/forgotPassword', (route) => false),
       ),
     );
   }

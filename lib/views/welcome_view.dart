@@ -30,10 +30,10 @@ class WelcomeView extends StatelessWidget {
           child: MacquarieBanner(),
         ),
       ),
-      const Align(
+      Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding: EdgeInsets.all(60.0),
+            padding: const EdgeInsets.all(60.0),
             child: Column(
               // do i need this?
               mainAxisSize: MainAxisSize.min,
@@ -41,10 +41,20 @@ class WelcomeView extends StatelessWidget {
                 WelcomeButton(
                     textColor: white,
                     buttonColor: magenta,
-                    buttonText: register),
-                SizedBox(height: 20),
+                    buttonText: register,
+                    onPressed: () =>
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/register',
+                          (route) => false,
+                        )),
+                const SizedBox(height: 20),
                 WelcomeButton(
-                    textColor: white, buttonColor: purple, buttonText: login)
+                  onPressed: () => Navigator.of(context)
+                      .pushNamedAndRemoveUntil('/login', (route) => false),
+                  textColor: white,
+                  buttonColor: purple,
+                  buttonText: login,
+                )
               ],
             ),
           )),
