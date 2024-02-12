@@ -33,7 +33,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     return Scaffold(
       body: AuthTemplate(
           viewTitle: forgotPassword,
-          buttonTitle: passwordReset,
+          buttonTitle: resetPassword,
           textButtonTitle: cancel,
           showNameField: false,
           showEmailField: true,
