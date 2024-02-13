@@ -14,7 +14,7 @@ class VerifyText extends StatelessWidget {
           child: Column(
         children: [
           Text(
-              'You have been sent a verification email. Your account must be verified to login',
+              verifyText,
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 20, fontFamily: montserrat, color: black)),

@@ -16,5 +16,5 @@ const resendVerification = 'Resend Verification Email';
 const startSession = 'Start Session';
 const logOut = 'Logout';
 const submitReport = 'Submit Report';
-
+const verifyText = 'You have been sent a verification email. Your account must be verified to login';
 

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/image_constants.dart';
+import 'package:mq_safety_first/templates/floatingSettingsButton.dart';
+import 'package:mq_safety_first/templates/home_view_tile.dart';
+import 'package:mq_safety_first/templates/home_view_tile_trailing.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
 
 import '../config/color_constants.dart';
@@ -24,17 +27,7 @@ class _HomeViewState extends State<HomeView> {
       // Using a stack to place items where I need to without affecting the placement of other widgets
       body: Stack(
         children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(25, 65, 0, 0),
-              child: FloatingActionButton(
-                onPressed: () {},
-                backgroundColor: white,
-                child: const Icon(Icons.settings),
-              ),
-            ),
-          ),
+          const FloatingSettingsButton(),
           PositionedDirectional(
             // WILL THIS WORK FOR EVERY PHONE?
             start: (width / 2),
@@ -61,7 +54,7 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         CircleAvatar(
                           backgroundImage:
-                              AssetImage('assets/images/default.jpg'),
+                              AssetImage(defaultPicPath),
                           maxRadius: 60,
                         ),
                         Column(
@@ -83,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
               Padding(
                 padding: const EdgeInsets.all(35.0),
                 child: SizedBox(
-                  height: height / 2,
+                  height: height * .5,
                   child: Container(
                     decoration: const BoxDecoration(
                       color: white,
@@ -96,71 +89,11 @@ class _HomeViewState extends State<HomeView> {
                     child: ListView(
                         padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
                         children: const <Widget>[
-                          Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                              minVerticalPadding: 20,
-                              tileColor: white,
-                              leading: Icon(size: 40, Icons.business),
-                              title: Text('Building',
-                                  style: TextStyle(
-                                      fontSize: 15, fontFamily: montserrat)),
-                            ),
-                          ),
-                          Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                              minVerticalPadding: 20,
-                              tileColor: white,
-                              leading: Icon(size: 40, Icons.engineering),
-                              title: Text('Lab Type',
-                                  style: TextStyle(
-                                      fontSize: 15, fontFamily: montserrat)),
-                            ),
-                          ),
-                          Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                              minVerticalPadding: 20,
-                              tileColor: white,
-                              leading: Icon(size: 40, Icons.edit),
-                              title: Text('Activity Name',
-                                  style: TextStyle(
-                                      fontSize: 15, fontFamily: montserrat)),
-                            ),
-                          ),
-                          Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                              minVerticalPadding: 20,
-                              tileColor: white,
-                              leading: Icon(size: 40, Icons.update),
-                              title: Text('Building',
-                                  style: TextStyle(
-                                      fontSize: 15, fontFamily: montserrat)),
-                              trailing: Icon(Icons.chevron_right, size: 40),
-                            ),
-                          ),
-                          Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                              contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                              minVerticalPadding: 20,
-                              tileColor: white,
-                              leading:
-                                  Icon(size: 40, Icons.notifications_active),
-                              title: Text('Check-in Frequency',
-                                  style: TextStyle(
-                                      fontSize: 15, fontFamily: montserrat)),
-                              trailing: Icon(Icons.chevron_right, size: 40),
-                            ),
-                          ),
+                          HomeScreenTile(leadingIcon: Icons.business),
+                          HomeScreenTile(leadingIcon: Icons.engineering),
+                          HomeScreenTile(leadingIcon: Icons.edit),
+                          HomeViewTileTrailing(leadingIcon: Icons.update, trailingIcon: Icons.chevron_right),
+                          HomeViewTileTrailing(leadingIcon:  Icons.notifications_active, trailingIcon: Icons.chevron_right),
                         ]),
                   ),
                 ),

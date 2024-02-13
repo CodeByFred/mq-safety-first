@@ -19,7 +19,7 @@ class WelcomeView extends StatelessWidget {
           height: double.infinity,
           // Ensures the container fills the height
           child: Image.asset(
-            'assets/images/welcome.jpg',
+            welcomePath,
             fit: BoxFit
                 .cover, // This will cover the whole screen, maintaining aspect ratio
           ),

@@ -1,4 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:mq_safety_first/config/color_constants.dart';
+import 'package:mq_safety_first/config/text_constants.dart';
+
+const mqWelcomeScreenPath = 'assets/images/mq_welcome_screen.png';
+const defaultPicPath = 'assets/images/default.jpg';
+const welcomePath = 'assets/images/welcome.jpg';
 
 class MacquarieBanner extends StatelessWidget {
   const MacquarieBanner({super.key});
@@ -11,7 +17,7 @@ class MacquarieBanner extends StatelessWidget {
           child: Align(
             heightFactor: 0.9,
             child: Image.asset(
-              'assets/images/mq_welcome_screen.png',
+              mqWelcomeScreenPath,
             ),
           ),
         ),
@@ -23,12 +29,12 @@ class MacquarieBanner extends StatelessWidget {
             child: Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "Safety First",
+                safetyFirst,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Colors.black,
+                  color: black,
                   fontSize: 14,
-                  fontFamily: 'Montserrat',
+                  fontFamily: montserrat,
                 ),
               ),
             ),
@@ -38,5 +44,3 @@ class MacquarieBanner extends StatelessWidget {
     );
   }
 }
-
-

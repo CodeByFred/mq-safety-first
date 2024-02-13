@@ -24,7 +24,7 @@ class LargeBottomButton extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 fixedSize: const Size(260, 35),
-                foregroundColor: Colors.white,
+                foregroundColor: white,
                 backgroundColor: brightRed),
             child: Text(
               buttonTitle,
