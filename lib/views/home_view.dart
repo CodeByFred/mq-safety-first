@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/image_constants.dart';
-import 'package:mq_safety_first/templates/floatingSettingsButton.dart';
+import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/home_view_tile.dart';
 import 'package:mq_safety_first/templates/home_view_tile_trailing.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
       // Using a stack to place items where I need to without affecting the placement of other widgets
       body: Stack(
         children: [
-          const FloatingSettingsButton(),
+          FloatingTopLeftButton(icon: Icons.settings, onPressed: () => Navigator.pushNamed(context, "/settings")),
           PositionedDirectional(
             // WILL THIS WORK FOR EVERY PHONE?
             start: (width / 2),

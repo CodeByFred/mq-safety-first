@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../config/color_constants.dart';
 
-class FloatingSettingsButton extends StatelessWidget {
-  const FloatingSettingsButton({super.key});
+class FloatingTopLeftButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  final IconData icon;
+  const FloatingTopLeftButton({super.key, required this.icon, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +14,9 @@ class FloatingSettingsButton extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(25, 65, 0, 0),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: onPressed,
           backgroundColor: white,
-          child: const Icon(Icons.settings),
+          child: Icon(icon),
         ),
       ),
     );

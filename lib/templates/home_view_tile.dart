@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mq_safety_first/config/text_styling_15.dart';
 
 import '../config/color_constants.dart';
 import '../config/text_constants.dart';
@@ -17,8 +18,7 @@ class HomeScreenTile extends StatelessWidget {
         tileColor: white,
         leading: Icon(size: 40, leadingIcon),
         title: const Text('Building',
-            style: TextStyle(
-                fontSize: 15, fontFamily: montserrat)),
+            style: textStyle15),
       ),
     );
   }
