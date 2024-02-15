@@ -27,7 +27,7 @@ class _HomeViewState extends State<HomeView> {
       // Using a stack to place items where I need to without affecting the placement of other widgets
       body: Stack(
         children: [
-          FloatingTopLeftButton(icon: Icons.settings, onPressed: () => Navigator.pushNamed(context, "/settings")),
+          FloatingTopLeftButton(icon: Icons.settings, onPressed: () => Navigator.pushNamed(context, '/settings')),
           PositionedDirectional(
             // WILL THIS WORK FOR EVERY PHONE?
             start: (width / 2),

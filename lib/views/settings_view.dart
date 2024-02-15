@@ -42,24 +42,23 @@ class _SettingsViewState extends State<SettingsView> {
       body: Stack(children: [
         FloatingTopLeftButton(
           icon: Icons.arrow_back,
-          onPressed: () => Navigator.pushNamedAndRemoveUntil(
-              context, '/home', (route) => false),
+          onPressed: () => Navigator.pop(context),
         ),
         const Positioned(
             top: 60,
             right: 25,
             child: CircleAvatar(
               backgroundImage: AssetImage(defaultPicPath),
-              maxRadius: 60,
+              maxRadius: 55,
             )),
         Padding(
-          padding: const EdgeInsets.only(top: 175),
+          padding: const EdgeInsets.only(top: 155),
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: const EdgeInsets.all(22.0),
                 child: SizedBox(
-                  height: height * .62,
+                  height: height * .67,
                   child: Container(
                     decoration: const BoxDecoration(
                       color: white,
@@ -70,7 +69,7 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     // EDGE INSETS NEEDS FIXING!!! THIS WILL NOT WORK ON EVERY PHONE
                     child: ListView(
-                        padding: const EdgeInsets.fromLTRB(20, 15, 20, 10),
+                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
                         children: <Widget>[
                           Card(
                             elevation: 10,
@@ -157,14 +156,16 @@ class _SettingsViewState extends State<SettingsView> {
                                 tileColor: white,
                                 title: Text('Duration', style: textStyle15)),
                           ),
-                          const Card(
+                          Card(
                             elevation: 10,
                             shadowColor: black,
                             child: ListTile(
+                                onTap: () => Navigator.pushNamed(context, '/history'),
                                 dense: true,
                                 tileColor: white,
-                                title: Text('View History', style: textStyle15),
-                                trailing: Icon(Icons.chevron_right)),
+                                title: const Text('View History',
+                                    style: textStyle15),
+                                trailing: const Icon(Icons.chevron_right)),
                           ),
                           const Card(
                               elevation: 10,
@@ -223,6 +224,17 @@ class _SettingsViewState extends State<SettingsView> {
                                   ],
                                 ),
                               )),
+                          Card(
+                            elevation: 10,
+                            shadowColor: black,
+                            child: ListTile(
+                                onTap: () => Navigator.pushNamed(context, '/report'),
+                                dense: true,
+                                tileColor: white,
+                                title: const Text('Report Issue',
+                                    style: textStyle15),
+                                trailing: const Icon(Icons.flag)),
+                          ),
                         ]),
                   ),
                 ),

@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/views/forgot_password_view.dart';
+import 'package:mq_safety_first/views/history_view.dart';
 import 'package:mq_safety_first/views/home_view.dart';
 import 'package:mq_safety_first/views/login_view.dart';
 import 'package:mq_safety_first/views/register_view.dart';
+import 'package:mq_safety_first/views/report_issue_view.dart';
 import 'package:mq_safety_first/views/settings_view.dart';
 import 'package:mq_safety_first/views/verify_email_view.dart';
 import 'package:mq_safety_first/views/welcome_view.dart';
@@ -39,6 +41,8 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeView(),
         '/verify': (context) => const VerifyEmailView(),
         '/settings': (context) => const SettingsView(),
+        '/history': (context) => const HistoryView(),
+        '/report' : (context) => const ReportIssueView(),
       },
     );
   }
