@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
+import 'package:mq_safety_first/views/active_session_view.dart';
 import 'package:mq_safety_first/views/forgot_password_view.dart';
 import 'package:mq_safety_first/views/history_view.dart';
 import 'package:mq_safety_first/views/home_view.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => const SettingsView(),
         '/history': (context) => const HistoryView(),
         '/report' : (context) => const ReportIssueView(),
+        '/activeSession': (context) => const ActiveSessionView(),
       },
     );
   }

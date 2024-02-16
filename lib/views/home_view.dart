@@ -103,7 +103,7 @@ class _HomeViewState extends State<HomeView> {
           // SHOULD I MAKE THIS A TEMPLATE SINCE IT IS ON MULTIPLE SCREENS? NOT SURE IF IT'S POSSIBLE
           LargeBottomButton(
             buttonTitle: startSession,
-            onPressedLBB: () {},
+            onPressedLBB: () => Navigator.pushNamedAndRemoveUntil(context, '/activeSession', (route) => false),
           ),
         ],
       ),
