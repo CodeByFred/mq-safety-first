@@ -1,11 +1,21 @@
+import 'package:flic_button/flic_button.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/text_styling_15.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
+import 'package:mq_safety_first/flic2/flic_methods.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../config/color_constants.dart';
 import '../config/image_constants.dart';
 import '../config/text_constants.dart';
+
+class ButtonListener with Flic2Listener {
+  @override
+  void onButtonClicked(Flic2ButtonClick buttonClick) {
+    print('button ${buttonClick.button.uuid} clicked');
+  }
+}
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -25,6 +35,7 @@ final MaterialStateProperty<Icon?> thumbIcon =
 );
 
 class _SettingsViewState extends State<SettingsView> {
+  bool _selectedBluetooth = false;
   String? _selectedValueDropDownRole;
   bool _isSelectedSound = false;
   bool _isSelectedVibrate = false;
@@ -32,11 +43,37 @@ class _SettingsViewState extends State<SettingsView> {
 
   IconData? get leadingIcon => null;
 
+  void handleTap() async {
+    bool isGranted = await Permission.bluetooth.request().isGranted &&
+        await Permission.bluetoothScan.request().isGranted &&
+        await Permission.bluetoothConnect.request().isGranted &&
+        await Permission.location.request().isGranted;
+
+    if (isGranted) {
+      // Assuming GlobalVariables.flicPlugin is statically accessible
+      final flicPlugin = FlicButtonPlugin(flic2listener: ButtonListener());
+
+      flicPlugin.invokation?.then((value) {
+        // Initialization logic here
+        return flicPlugin.getFlic2Buttons();
+      }).then((value) async {
+        if (value.isEmpty) {
+          // No buttons found, start scanning
+          bool? found = await flicPlugin.scanForFlic2();
+          print('Scanning');
+          print(found);
+        }
+      });
+    } else {
+      // Handle the case where permissions are not granted
+      print("Permissions not granted");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get the screen size
     Size screenSize = MediaQuery.of(context).size;
-    double width = screenSize.width;
     double height = screenSize.height;
     return Scaffold(
       body: Stack(children: [
@@ -160,23 +197,46 @@ class _SettingsViewState extends State<SettingsView> {
                             elevation: 10,
                             shadowColor: black,
                             child: ListTile(
-                                onTap: () => Navigator.pushNamed(context, '/history'),
+                                onTap: () =>
+                                    Navigator.pushNamed(context, '/history'),
                                 dense: true,
                                 tileColor: white,
                                 title: const Text('View History',
                                     style: textStyle15),
                                 trailing: const Icon(Icons.chevron_right)),
                           ),
-                          const Card(
-                              elevation: 10,
-                              shadowColor: black,
-                              child: ListTile(
-                                dense: true,
-                                tileColor: white,
-                                title: Text('Pair Bluetooth Button',
-                                    style: textStyle15),
-                                trailing: Icon(Icons.bluetooth),
-                              )),
+                          Card(
+                            elevation: 10,
+                            shadowColor: black,
+                            child: ListTile(
+                              dense: true,
+                              tileColor: white,
+                              title: const Text('Pair Bluetooth Button',
+                                  style: textStyle15),
+                              trailing: Icon(Icons.bluetooth,
+                                  color:
+                                      _selectedBluetooth ? Colors.blue : null),
+                              onTap: () async {
+                                // handleTap();
+
+                                setState(() {
+                                  _selectedBluetooth = !_selectedBluetooth;
+                                });
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => const Dialog(
+                                    child: Column(mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        MyAppFlic(),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                           Card(
                               elevation: 10,
                               shadowColor: black,
@@ -228,7 +288,8 @@ class _SettingsViewState extends State<SettingsView> {
                             elevation: 10,
                             shadowColor: black,
                             child: ListTile(
-                                onTap: () => Navigator.pushNamed(context, '/report'),
+                                onTap: () =>
+                                    Navigator.pushNamed(context, '/report'),
                                 dense: true,
                                 tileColor: white,
                                 title: const Text('Report Issue',

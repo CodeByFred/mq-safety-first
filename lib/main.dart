@@ -14,7 +14,7 @@ import 'package:mq_safety_first/views/welcome_view.dart';
 
 import 'firebase_options.dart';
 
-void main() {
+main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -22,12 +22,10 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'An App',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: red),
         useMaterial3: true,
@@ -43,7 +41,7 @@ class MyApp extends StatelessWidget {
         '/verify': (context) => const VerifyEmailView(),
         '/settings': (context) => const SettingsView(),
         '/history': (context) => const HistoryView(),
-        '/report' : (context) => const ReportIssueView(),
+        '/report': (context) => const ReportIssueView(),
         '/activeSession': (context) => const ActiveSessionView(),
       },
     );
@@ -60,17 +58,15 @@ class StateManager extends StatelessWidget {
       future: Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform),
       builder: (context, snapshot) {
-        switch(snapshot.connectionState) {
+        switch (snapshot.connectionState) {
           case ConnectionState.none:
             return const WelcomeView();
           case ConnectionState.done:
             return const HomeView();
           default:
             return const CircularProgressIndicator();
-    }
-
         }
-      ,
+      },
     );
   }
 }

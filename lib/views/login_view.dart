@@ -46,29 +46,29 @@ class _LoginViewState extends State<LoginView> {
         onPressedLBB: () async {
           final email = _email.text;
           final password = _password.text;
-          FirebaseAuth.instance.currentUser?.reload();
-          final bool verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
-          print(verified);
-          if (verified) {
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
+          // final bool verified = FirebaseAuth.instance.currentUser?.emailVerified ?? false;
+          // print(verified);
+          // if (verified) {
+            final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: email,
               password: password,
             );
+            print(userCredential);
             Navigator.of(context)
                 .pushNamedAndRemoveUntil('/home', (route) => false);
-          } else if (!verified) {
-            print('not verified');
-            showDialog(
-                context: context,
-                builder: (context) => AlertDialog(backgroundColor: white, surfaceTintColor: white,
-                      title: const Text('Invalid Credentials'),
-                      actions: <Widget>[
-                        TextButton(
-                            onPressed: () => Navigator.pop(context, 'Cancel'),
-                            child: const Text('Cancel'))
-                      ],
-                    ));
-          }
+          // } else {
+          //   print('Failed');
+          //   showDialog(
+          //       context: context,
+          //       builder: (context) => AlertDialog(backgroundColor: white, surfaceTintColor: white,
+          //             title: const Text('Invalid Credentials'),
+          //             actions: <Widget>[
+          //               TextButton(
+          //                   onPressed: () => Navigator.pop(context, 'Cancel'),
+          //                   child: const Text('Cancel'))
+          //             ],
+          //           ));
+          // }
         },
         onPressedATB: () => Navigator.of(context)
             .pushNamedAndRemoveUntil('/forgotPassword', (route) => false),
