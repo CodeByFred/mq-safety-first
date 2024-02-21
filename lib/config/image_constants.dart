@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/config/text_constants.dart';
+import 'package:mq_safety_first/config/text_styling_size.dart';
 
 const mqWelcomeScreenPath = 'assets/images/mq_welcome_screen.png';
 const defaultPicPath = 'assets/images/default.jpg';
@@ -22,7 +23,7 @@ class MacquarieBanner extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 20.0,
+          height: 25.0,
           width: 200.0,
           child: ColoredBox(
             color: Colors.white,
@@ -31,11 +32,7 @@ class MacquarieBanner extends StatelessWidget {
               child: Text(
                 safetyFirst,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: black,
-                  fontSize: 14,
-                  fontFamily: montserrat,
-                ),
+                style: textStyle15,
               ),
             ),
           ),

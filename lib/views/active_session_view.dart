@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
-import 'package:mq_safety_first/config/text_styling_15.dart';
+import 'package:mq_safety_first/config/image_constants.dart';
+import 'package:mq_safety_first/config/text_styling_size.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 
 class ActiveSessionView extends StatefulWidget {
@@ -23,81 +24,91 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
           icon: Icons.settings,
           onPressed: () => Navigator.pushNamed(context, '/settings'),
         ),
-        Align(
-          alignment: Alignment.topRight,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 70, right: 25),
-            child: Container(
-              height: 100,
-              width: 265,
-              decoration: const BoxDecoration(
-                color: white,
-                boxShadow: [
-                  BoxShadow(color: black, blurRadius: 4, offset: Offset(0, 1))
+        PositionedDirectional(
+          // WILL THIS WORK FOR EVERY PHONE?
+          start: (width / 2),
+          child: const Padding(
+              // WILL THIS WORK FOR EVERY PHONE?
+              padding: EdgeInsets.fromLTRB(0, 65, 25, 0),
+              child: Column(
+                children: [
+                  MacquarieBanner(),
                 ],
-              ),
-              child: const Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Text(
-                        'Activity Name: ',
-                        style: textStyle15,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Text(
-                        'Lab Type',
-                        style: textStyle15,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Text(
-                        'Building:',
-                        style: textStyle15,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Text(
-                        'Session Time Left:',
-                        style: textStyle15,
-                      ),
-                    ),
-                  ]),
-            ),
-          ),
+              )),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 225),
+          padding: const EdgeInsets.only(top: 165),
           child: Align(
               alignment: Alignment.center,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        null;
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: brightRed,
-                          foregroundColor: white,
-                          fixedSize: Size((width * .75), 250),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      child: const Text(
-                        'Alarm',
-                        style: textStyle20,
-                      )),
+                  Container(
+                    height: 125,
+                    width: (width * .8),
+                    decoration: const BoxDecoration(
+                      color: white,
+                      boxShadow: [
+                        BoxShadow(
+                            color: black, blurRadius: 4, offset: Offset(0, 1))
+                      ],
+                    ),
+                    child: const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'Activity Name: ',
+                              style: textStyle20,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'Lab Type:',
+                              style: textStyle20,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'Building:',
+                              style: textStyle20,
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'Session Time Left:',
+                              style: textStyle20,
+                            ),
+                          ),
+                        ]),
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.only(top: 40),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          null;
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: brightRed,
+                            foregroundColor: white,
+                            fixedSize: Size((width * .8), 250),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        child: const Text(
+                          'Alarm',
+                          style: textStyle20,
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 40),
                     child: Container(
-                      height: 100,
-                      width: (width * .75),
+                      height: 75,
+                      width: (width * .8),
                       decoration: const BoxDecoration(
                         color: white,
                         boxShadow: [
@@ -120,7 +131,7 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 60),
+                    padding: const EdgeInsets.only(top: 40),
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [

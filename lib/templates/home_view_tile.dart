@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mq_safety_first/config/text_styling_15.dart';
+import 'package:mq_safety_first/config/text_styling_size.dart';
 
 import '../config/color_constants.dart';
 import '../config/text_constants.dart';
 
 class HomeScreenTile extends StatelessWidget {
   final IconData leadingIcon;
-  const HomeScreenTile({super.key, required this.leadingIcon});
+  final String title;
+  final Function onTap;
+  const HomeScreenTile({super.key, required this.leadingIcon, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +19,9 @@ class HomeScreenTile extends StatelessWidget {
         minVerticalPadding: 20,
         tileColor: white,
         leading: Icon(size: 40, leadingIcon),
-        title: const Text('Building',
+        title: Text(title,
             style: textStyle15),
+        onTap: () =>  onTap,
       ),
     );
   }

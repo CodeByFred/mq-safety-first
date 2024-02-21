@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mq_safety_first/config/text_styling_15.dart';
+import 'package:mq_safety_first/config/text_styling_size.dart';
 
 class HistoryEntryLineText extends StatelessWidget {
   final String text;

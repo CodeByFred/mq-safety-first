@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/history_display_container.dart';
 
+import '../config/image_constants.dart';
+
 class HistoryView extends StatefulWidget {
   const HistoryView({super.key});
 
@@ -22,8 +24,20 @@ class _HistoryViewState extends State<HistoryView> {
           icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),
         ),
+        PositionedDirectional(
+          // WILL THIS WORK FOR EVERY PHONE?
+          start: (width / 2),
+          child: const Padding(
+            // WILL THIS WORK FOR EVERY PHONE?
+              padding: EdgeInsets.fromLTRB(0, 65, 25, 0),
+              child: Column(
+                children: [
+                  MacquarieBanner(),
+                ],
+              )),
+        ),
         Padding(
-          padding: const EdgeInsets.only(top: 100),
+          padding: const EdgeInsets.only(top: 110),
           child: SizedBox(
             child: Padding(
               padding: const EdgeInsets.only(top: 40),

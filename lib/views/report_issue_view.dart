@@ -3,8 +3,9 @@ import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
 
+import '../config/image_constants.dart';
 import '../config/text_constants.dart';
-import '../config/text_styling_15.dart';
+import '../config/text_styling_size.dart';
 
 class ReportIssueView extends StatefulWidget {
   const ReportIssueView({super.key});
@@ -27,6 +28,18 @@ class _ReportIssueViewState extends State<ReportIssueView> {
         FloatingTopLeftButton(
           icon: Icons.arrow_back,
           onPressed: () => Navigator.pop(context),
+        ),
+        PositionedDirectional(
+          // WILL THIS WORK FOR EVERY PHONE?
+          start: (width / 2),
+          child: const Padding(
+            // WILL THIS WORK FOR EVERY PHONE?
+              padding: EdgeInsets.fromLTRB(0, 65, 25, 0),
+              child: Column(
+                children: [
+                  MacquarieBanner(),
+                ],
+              )),
         ),
         Padding(
           padding: const EdgeInsets.only(

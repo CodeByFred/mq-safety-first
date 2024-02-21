@@ -6,7 +6,9 @@ import '../config/text_constants.dart';
 class HomeViewTileTrailing extends StatelessWidget {
   final IconData leadingIcon;
   final IconData trailingIcon;
-  const HomeViewTileTrailing({super.key, required this.leadingIcon, required this.trailingIcon});
+  final String title;
+  final Function onTap;
+  const HomeViewTileTrailing({super.key, required this.leadingIcon, required this.trailingIcon, required this.title, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +16,14 @@ class HomeViewTileTrailing extends StatelessWidget {
       elevation: 10,
       shadowColor: black,
       child: ListTile(
-        contentPadding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+        contentPadding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
         minVerticalPadding: 20,
         tileColor: white,
         leading: Icon(size: 40, leadingIcon),
-        title: Text('Building',
-            style: TextStyle(
+        title: Text(title,
+            style: const TextStyle(
                 fontSize: 15, fontFamily: montserrat)),
-        trailing: Icon(trailingIcon, size: 40),
+        trailing: Icon(trailingIcon, size: 40), onTap: () => onTap,
       ),
     );
   }

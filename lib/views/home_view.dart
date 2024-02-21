@@ -8,6 +8,8 @@ import 'package:mq_safety_first/templates/large_bottom_button.dart';
 import '../config/color_constants.dart';
 import '../config/text_constants.dart';
 
+Future<TimeOfDay?>? selectedTime;
+
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
@@ -74,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(35.0),
+                padding: const EdgeInsets.fromLTRB(20, 35, 20, 5),
                 child: SizedBox(
                   height: height * .5,
                   child: Container(
@@ -88,12 +90,22 @@ class _HomeViewState extends State<HomeView> {
                     // EDGE INSETS NEEDS FIXING!!! THIS WILL NOT WORK ON EVERY PHONE
                     child: ListView(
                         padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
-                        children: const <Widget>[
-                          HomeScreenTile(leadingIcon: Icons.business),
-                          HomeScreenTile(leadingIcon: Icons.engineering),
-                          HomeScreenTile(leadingIcon: Icons.edit),
-                          HomeViewTileTrailing(leadingIcon: Icons.update, trailingIcon: Icons.chevron_right),
-                          HomeViewTileTrailing(leadingIcon:  Icons.notifications_active, trailingIcon: Icons.chevron_right),
+                        children:  <Widget>[
+                          HomeScreenTile(title: 'Building',leadingIcon: Icons.business, onTap: () {
+                            null;
+                          },),
+                          HomeScreenTile(title: 'Lab Type',leadingIcon: Icons.engineering, onTap: () {
+                            null;
+                          },),
+                          HomeScreenTile(title: 'Activity Name',leadingIcon: Icons.edit, onTap: () {
+                            null;
+                          },),
+                          HomeViewTileTrailing(title: 'Duration',leadingIcon: Icons.update, trailingIcon: Icons.chevron_right, onTap: () =>
+
+                             showDialog(context: context, builder: (context) => Dialog(child: TimePickerDialog(initialTime: TimeOfDay.now())))),
+                          HomeViewTileTrailing(title: 'Check-in Frequency',leadingIcon:  Icons.notifications_active, trailingIcon: Icons.chevron_right, onTap: () {
+                            null;
+                          },),
                         ]),
                   ),
                 ),
