@@ -69,7 +69,7 @@ class _ReportIssueViewState extends State<ReportIssueView> {
                               dense: true,
                               // minVerticalPadding: 20,
                               tileColor: white,
-                              title: const Text('Issue', style: textStyle15),
+                              title: const Text('Issue', style: textStyle15Black),
                               trailing: DropdownButton<String>(
                                 onChanged: (newValue) {
                                   setState(() {
@@ -77,7 +77,7 @@ class _ReportIssueViewState extends State<ReportIssueView> {
                                   });
                                 },
                                 hint: const Text('Select one',
-                                    style: textStyle15),
+                                    style: textStyle15Black),
                                 value: _selectValueDropDownIssue,
                                 items: [
                                   'Accident',
@@ -87,7 +87,7 @@ class _ReportIssueViewState extends State<ReportIssueView> {
                                 ].map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
-                                    child: Text(value, style: textStyle15),
+                                    child: Text(value, style: textStyle15Black),
                                   );
                                 }).toList(),
                               ),
@@ -101,7 +101,7 @@ class _ReportIssueViewState extends State<ReportIssueView> {
                                 title: TextField(
                                   minLines: 5,
                                   maxLines: null,
-                                  style: textStyle15,
+                                  style: textStyle15Black,
                                   decoration: InputDecoration(
                                       hintText: 'Issue Description',
                                       border: UnderlineInputBorder(
@@ -113,7 +113,7 @@ class _ReportIssueViewState extends State<ReportIssueView> {
                               children: [
                                 Icon(Icons.add_a_photo_outlined, size: 50), Padding(
                                   padding: EdgeInsets.only(top: 10),
-                                  child: Text('Add Photo (Optional)', style: textStyle15,),
+                                  child: Text('Add Photo (Optional)', style: textStyle15Black,),
                                 )
                               ],
                             ),

@@ -1,6 +1,7 @@
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flic_button/flic_button.dart';
 import 'package:flutter/material.dart';
-import 'package:mq_safety_first/config/text_styling_15.dart';
+import 'package:mq_safety_first/config/text_styling_size.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
 import 'package:mq_safety_first/flic2/flic_methods.dart';
@@ -9,13 +10,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../config/color_constants.dart';
 import '../config/image_constants.dart';
 import '../config/text_constants.dart';
-
-class ButtonListener with Flic2Listener {
-  @override
-  void onButtonClicked(Flic2ButtonClick buttonClick) {
-    print('button ${buttonClick.button.uuid} clicked');
-  }
-}
+import '../timers/check_in_timer.dart';
+import '../timers/session_timer.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});
@@ -35,6 +31,8 @@ final MaterialStateProperty<Icon?> thumbIcon =
 );
 
 class _SettingsViewState extends State<SettingsView> {
+  final Duration _duration = const Duration(hours: 0, minutes: 0);
+
   bool _selectedBluetooth = false;
   String? _selectedValueDropDownRole;
   bool _isSelectedSound = false;
@@ -115,7 +113,8 @@ class _SettingsViewState extends State<SettingsView> {
                               dense: true,
                               // minVerticalPadding: 20,
                               tileColor: white,
-                              title: const Text('Role', style: textStyle15),
+                              title:
+                                  const Text('Role', style: textStyle15Black),
                               trailing: DropdownButton<String>(
                                 onChanged: (newValue) {
                                   setState(() {
@@ -123,7 +122,7 @@ class _SettingsViewState extends State<SettingsView> {
                                   });
                                 },
                                 hint: const Text('Select Role',
-                                    style: textStyle15),
+                                    style: textStyle15Black),
                                 value: _selectedValueDropDownRole,
                                 items: [
                                   'Undergraduate',
@@ -132,7 +131,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 ].map((String value) {
                                   return DropdownMenuItem<String>(
                                     value: value,
-                                    child: Text(value, style: textStyle15),
+                                    child: Text(value, style: textStyle15Black),
                                   );
                                 }).toList(),
                               ),
@@ -145,7 +144,8 @@ class _SettingsViewState extends State<SettingsView> {
                                 dense: true,
                                 tileColor: white,
                                 trailing: Icon(Icons.phone),
-                                title: Text('Buddy Phone', style: textStyle15)),
+                                title: Text('Buddy Phone',
+                                    style: textStyle15Black)),
                           ),
                           const Card(
                             elevation: 10,
@@ -154,7 +154,8 @@ class _SettingsViewState extends State<SettingsView> {
                                 dense: true,
                                 tileColor: white,
                                 trailing: Icon(Icons.email),
-                                title: Text('Buddy Email', style: textStyle15)),
+                                title: Text('Buddy Email',
+                                    style: textStyle15Black)),
                           ),
                           Card(
                             elevation: 10,
@@ -163,7 +164,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 dense: true,
                                 tileColor: white,
                                 title: const Text('Notify Campus Security',
-                                    style: textStyle15),
+                                    style: textStyle15Black),
                                 trailing: Switch(
                                   inactiveThumbColor: black,
                                   inactiveTrackColor: white,
@@ -176,22 +177,104 @@ class _SettingsViewState extends State<SettingsView> {
                                   },
                                 )),
                           ),
-                          const Card(
+                          Card(
+                              elevation: 10,
+                              shadowColor: black,
+                              child: ListTile(
+                                dense: true,
+                                tileColor: white,
+                                title: const Text('Check-in Frequency',
+                                    style: textStyle15Black),
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext dialogContext) {
+                                      // Use dialogContext to differentiate it from the widget tree context
+                                      Duration localDuration =
+                                          _duration; // Make a local copy of _duration to use within the dialog
+                                      return Dialog(
+                                        child: StatefulBuilder(
+                                          // Introduce StatefulBuilder here
+                                          builder: (BuildContext context,
+                                              StateSetter setState) {
+                                            // This setState is local to the StatefulBuilder's scope
+                                            return DurationPicker(
+                                              height: 500,
+                                              width: 500,
+                                              duration: localDuration,
+                                              // Use localDuration inside the dialog
+                                              onChange: (val) {
+                                                setState(() {
+                                                  // Check if the total minutes exceed 60
+                                                  if (val.inMinutes > 60) {
+                                                    // If it exceeds 60 minutes, calculate the remainder of minutes after dividing by 60
+                                                    int temp =
+                                                        val.inMinutes % 60;
+                                                    Duration tempDuration =
+                                                        Duration(minutes: temp);
+                                                    localDuration =
+                                                        tempDuration;
+                                                  } else {
+                                                    localDuration = val;
+                                                  }
+                                                });
+
+                                                // Convert the selected/adjusted duration to seconds
+                                                int durationInSeconds =
+                                                    localDuration.inSeconds;
+
+                                                // Pass the seconds to the CountdownTimerManager
+                                                CheckInTimerManager.setTimer(
+                                                    durationInSeconds);
+
+                                                // If you want to update the main state _duration when dialog is still open, do it here as well
+                                                // Note: This will not re-render the main widget until the dialog is closed
+                                              },
+                                              snapToMins: 5,
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              )),
+                          Card(
                             elevation: 10,
                             shadowColor: black,
                             child: ListTile(
                                 dense: true,
                                 tileColor: white,
-                                title: Text('Check-in Frequency',
-                                    style: textStyle15)),
-                          ),
-                          const Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                                dense: true,
-                                tileColor: white,
-                                title: Text('Duration', style: textStyle15)),
+                                title: const Text('Change Session Length',
+                                    style: textStyle15Black),
+                                onTap: () async {
+                                  final now = DateTime.now();
+                                  final pickedTime = await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  );
+
+                                  if (pickedTime != null) {
+                                    final todayPickedDateTime = DateTime(
+                                        now.year,
+                                        now.month,
+                                        now.day,
+                                        pickedTime.hour,
+                                        pickedTime.minute);
+                                    final futureDateTime =
+                                        todayPickedDateTime.isBefore(now)
+                                            ? todayPickedDateTime
+                                                .add(const Duration(days: 1))
+                                            : todayPickedDateTime;
+                                    final durationInSeconds = futureDateTime
+                                        .difference(now)
+                                        .inSeconds;
+
+                                    // Send this duration to your CountdownTimerManager
+                                    SessionTimerManager.setTimer(
+                                        durationInSeconds);
+                                  }
+                                }),
                           ),
                           Card(
                             elevation: 10,
@@ -202,7 +285,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 dense: true,
                                 tileColor: white,
                                 title: const Text('View History',
-                                    style: textStyle15),
+                                    style: textStyle15Black),
                                 trailing: const Icon(Icons.chevron_right)),
                           ),
                           Card(
@@ -212,26 +295,23 @@ class _SettingsViewState extends State<SettingsView> {
                               dense: true,
                               tileColor: white,
                               title: const Text('Pair Bluetooth Button',
-                                  style: textStyle15),
-                              trailing: Icon(Icons.bluetooth,
-                                  color:
-                                      _selectedBluetooth ? Colors.blue : null),
+                                  style: textStyle15Black),
+                              trailing: Icon(
+                                Icons.bluetooth,
+                                color: Colors.blue,
+                              ),
+                              // (buttonsFound != null) ? Colors.blue : null),
                               onTap: () async {
                                 // handleTap();
 
-                                setState(() {
-                                  _selectedBluetooth = !_selectedBluetooth;
-                                });
+                                // setState(() {
+                                //   buttonsFound;
+                                // });
 
                                 showDialog(
                                   context: context,
                                   builder: (context) => const Dialog(
-                                    child: Column(mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        MyAppFlic(),
-                                      ],
-                                    ),
+                                    child: MyAppFlic(),
                                   ),
                                 );
                               },
@@ -246,7 +326,8 @@ class _SettingsViewState extends State<SettingsView> {
                                 leading: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text('Sound', style: textStyle15),
+                                    const Text('Sound',
+                                        style: textStyle15Black),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Switch(
@@ -266,7 +347,8 @@ class _SettingsViewState extends State<SettingsView> {
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text('Vibrate', style: textStyle15),
+                                    const Text('Vibrate',
+                                        style: textStyle15Black),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 15),
                                       child: Switch(
@@ -293,7 +375,7 @@ class _SettingsViewState extends State<SettingsView> {
                                 dense: true,
                                 tileColor: white,
                                 title: const Text('Report Issue',
-                                    style: textStyle15),
+                                    style: textStyle15Black),
                                 trailing: const Icon(Icons.flag)),
                           ),
                         ]),

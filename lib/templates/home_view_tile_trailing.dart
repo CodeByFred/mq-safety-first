@@ -7,7 +7,7 @@ class HomeViewTileTrailing extends StatelessWidget {
   final IconData leadingIcon;
   final IconData trailingIcon;
   final String title;
-  final Function onTap;
+  final VoidCallback onTap;
   const HomeViewTileTrailing({super.key, required this.leadingIcon, required this.trailingIcon, required this.title, required this.onTap});
 
   @override
@@ -23,7 +23,7 @@ class HomeViewTileTrailing extends StatelessWidget {
         title: Text(title,
             style: const TextStyle(
                 fontSize: 15, fontFamily: montserrat)),
-        trailing: Icon(trailingIcon, size: 40), onTap: () => onTap,
+        trailing: Icon(trailingIcon, size: 40), onTap: onTap,
       ),
     );
   }

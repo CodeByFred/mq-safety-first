@@ -26,13 +26,13 @@ class MacquarieBanner extends StatelessWidget {
           height: 25.0,
           width: 200.0,
           child: ColoredBox(
-            color: Colors.white,
+            color: white,
             child: Align(
               alignment: Alignment.topCenter,
               child: Text(
                 safetyFirst,
                 textAlign: TextAlign.center,
-                style: textStyle15,
+                style: textStyle15Black,
               ),
             ),
           ),

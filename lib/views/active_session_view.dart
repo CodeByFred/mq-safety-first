@@ -3,6 +3,8 @@ import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/config/image_constants.dart';
 import 'package:mq_safety_first/config/text_styling_size.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
+import 'package:mq_safety_first/timers/check_in_timer.dart';
+import 'package:mq_safety_first/timers/session_timer.dart';
 
 class ActiveSessionView extends StatefulWidget {
   const ActiveSessionView({super.key});
@@ -61,29 +63,26 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
                               'Activity Name: ',
-                              style: textStyle20,
+                              style: textStyle20Black,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
                               'Lab Type:',
-                              style: textStyle20,
+                              style: textStyle20Black,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
                               'Building:',
-                              style: textStyle20,
+                              style: textStyle20Black,
                             ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'Session Time Left:',
-                              style: textStyle20,
-                            ),
+                            child: SessionTimer(),
                           ),
                         ]),
                   ),
@@ -101,7 +100,7 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                                 borderRadius: BorderRadius.circular(10))),
                         child: const Text(
                           'Alarm',
-                          style: textStyle20,
+                          style: textStyle20White,
                         )),
                   ),
                   Padding(
@@ -121,12 +120,9 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                           children: [
                             Text(
                               'Check In Time Left:',
-                              style: textStyle20,
+                              style: textStyle20Black,
                             ),
-                            Text(
-                              '12:05',
-                              style: textStyle20,
-                            )
+                            CheckInTimer(),
                           ]),
                     ),
                   ),
@@ -146,12 +142,15 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                                   backgroundColor: Colors.orange,
                                   fixedSize: Size((width * .375), 100)),
                               child: const Text('End Session',
-                                  style: textStyle20,
+                                  style: textStyle20White,
                                   maxLines: 2,
                                   textAlign: TextAlign.center)),
                           ElevatedButton(
                             onPressed: () {
-                              null;
+
+                              if(CheckInTimerManager.secondsRemaining < 60) {
+                                CheckInTimerManager.setTimer(CheckInTimerManager.lastSelectedTime);
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
@@ -159,7 +158,7 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                                 foregroundColor: white,
                                 backgroundColor: Colors.green,
                                 fixedSize: Size((width * .375), 100)),
-                            child: const Text('Check In', style: textStyle20),
+                            child: const Text('Check In', style: textStyle20White),
                           ),
                         ]),
                   )

@@ -1,12 +1,15 @@
+import 'package:duration_picker/duration_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/image_constants.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/home_view_tile.dart';
 import 'package:mq_safety_first/templates/home_view_tile_trailing.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
+import 'package:mq_safety_first/timers/session_timer.dart';
 
 import '../config/color_constants.dart';
 import '../config/text_constants.dart';
+import '../timers/check_in_timer.dart';
 
 Future<TimeOfDay?>? selectedTime;
 
@@ -18,6 +21,21 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  final Duration _duration = const Duration(hours: 0, minutes: 0);
+  late final TextEditingController _building;
+
+  @override
+  void initState() {
+    _building = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _building.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     // Get the screen size
@@ -29,7 +47,9 @@ class _HomeViewState extends State<HomeView> {
       // Using a stack to place items where I need to without affecting the placement of other widgets
       body: Stack(
         children: [
-          FloatingTopLeftButton(icon: Icons.settings, onPressed: () => Navigator.pushNamed(context, '/settings')),
+          FloatingTopLeftButton(
+              icon: Icons.settings,
+              onPressed: () => Navigator.pushNamed(context, '/settings')),
           PositionedDirectional(
             // WILL THIS WORK FOR EVERY PHONE?
             start: (width / 2),
@@ -55,9 +75,8 @@ class _HomeViewState extends State<HomeView> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CircleAvatar(
-                          backgroundImage:
-                              AssetImage(defaultPicPath),
-                          maxRadius: 60,
+                          backgroundImage: AssetImage(defaultPicPath),
+                          maxRadius: 55,
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -90,22 +109,109 @@ class _HomeViewState extends State<HomeView> {
                     // EDGE INSETS NEEDS FIXING!!! THIS WILL NOT WORK ON EVERY PHONE
                     child: ListView(
                         padding: const EdgeInsets.fromLTRB(20, 35, 20, 10),
-                        children:  <Widget>[
-                          HomeScreenTile(title: 'Building',leadingIcon: Icons.business, onTap: () {
-                            null;
-                          },),
-                          HomeScreenTile(title: 'Lab Type',leadingIcon: Icons.engineering, onTap: () {
-                            null;
-                          },),
-                          HomeScreenTile(title: 'Activity Name',leadingIcon: Icons.edit, onTap: () {
-                            null;
-                          },),
-                          HomeViewTileTrailing(title: 'Duration',leadingIcon: Icons.update, trailingIcon: Icons.chevron_right, onTap: () =>
+                        children: <Widget>[
+                          HomeScreenTile(
+                            title: 'Building',
+                            leadingIcon: Icons.business,
+                            onTap: () {},
+                          ),
+                          HomeScreenTile(
+                            title: 'Lab Type',
+                            leadingIcon: Icons.engineering,
+                            onTap: () {},
+                          ),
+                          HomeScreenTile(
+                            title: 'Activity Name',
+                            leadingIcon: Icons.edit,
+                            onTap: () {},
+                          ),
+                          HomeViewTileTrailing(
+                            title: 'Check-in Frequency',
+                            leadingIcon: Icons.notifications_active,
+                            trailingIcon: Icons.chevron_right,
+                            onTap: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext dialogContext) {
+                                  // Use dialogContext to differentiate it from the widget tree context
+                                  Duration localDuration =
+                                      _duration; // Make a local copy of _duration to use within the dialog
+                                  return Dialog(
+                                    child: StatefulBuilder(
+                                      // Introduce StatefulBuilder here
+                                      builder: (BuildContext context,
+                                          StateSetter setState) {
+                                        // This setState is local to the StatefulBuilder's scope
+                                        return DurationPicker(
+                                          height: 500,
+                                          width: 500,
+                                          duration: localDuration,
+                                          // Use localDuration inside the dialog
+                                          onChange: (val) {
+                                            setState(() {
+                                              // Check if the total minutes exceed 60
+                                              if (val.inMinutes > 60) {
+                                                // If it exceeds 60 minutes, calculate the remainder of minutes after dividing by 60
+                                                int temp = val.inMinutes % 60;
+                                                Duration tempDuration =
+                                                    Duration(minutes: temp);
+                                                localDuration = tempDuration;
+                                              } else {
+                                                localDuration = val;
+                                              }
+                                            });
 
-                             showDialog(context: context, builder: (context) => Dialog(child: TimePickerDialog(initialTime: TimeOfDay.now())))),
-                          HomeViewTileTrailing(title: 'Check-in Frequency',leadingIcon:  Icons.notifications_active, trailingIcon: Icons.chevron_right, onTap: () {
-                            null;
-                          },),
+                                            // Convert the selected/adjusted duration to seconds
+                                            int durationInSeconds =
+                                                localDuration.inSeconds;
+
+                                            // Pass the seconds to the CountdownTimerManager
+                                            CheckInTimerManager.setTimer(
+                                                durationInSeconds);
+
+                                            // If you want to update the main state _duration when dialog is still open, do it here as well
+                                            // Note: This will not re-render the main widget until the dialog is closed
+                                          },
+                                          // snapToMins: 5,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                          HomeViewTileTrailing(
+                            title: 'Session Length',
+                            leadingIcon: Icons.update,
+                            trailingIcon: Icons.chevron_right,
+                            onTap: () async {
+                              final now = DateTime.now();
+                              final pickedTime = await showTimePicker(
+                                context: context,
+                                initialTime: TimeOfDay.now(),
+                              );
+
+                              if (pickedTime != null) {
+                                final todayPickedDateTime = DateTime(
+                                    now.year,
+                                    now.month,
+                                    now.day,
+                                    pickedTime.hour,
+                                    pickedTime.minute);
+                                final futureDateTime =
+                                    todayPickedDateTime.isBefore(now)
+                                        ? todayPickedDateTime
+                                            .add(const Duration(days: 1))
+                                        : todayPickedDateTime;
+                                final durationInSeconds =
+                                    futureDateTime.difference(now).inSeconds;
+
+                                // Send this duration to your CountdownTimerManager
+                                SessionTimerManager.setTimer(durationInSeconds);
+                              }
+                            },
+                          ),
                         ]),
                   ),
                 ),
@@ -115,7 +221,8 @@ class _HomeViewState extends State<HomeView> {
           // SHOULD I MAKE THIS A TEMPLATE SINCE IT IS ON MULTIPLE SCREENS? NOT SURE IF IT'S POSSIBLE
           LargeBottomButton(
             buttonTitle: startSession,
-            onPressedLBB: () => Navigator.pushNamedAndRemoveUntil(context, '/activeSession', (route) => false),
+            onPressedLBB: () => Navigator.pushNamedAndRemoveUntil(
+                context, '/activeSession', (route) => false),
           ),
         ],
       ),

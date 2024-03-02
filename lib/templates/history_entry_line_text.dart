@@ -9,7 +9,7 @@ class HistoryEntryLineText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 20),
-      child: Text(text, style: textStyle15,),
+      child: Text(text, style: textStyle15Black,),
     );
   }
 }

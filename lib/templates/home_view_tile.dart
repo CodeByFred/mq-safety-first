@@ -20,7 +20,7 @@ class HomeScreenTile extends StatelessWidget {
         tileColor: white,
         leading: Icon(size: 40, leadingIcon),
         title: Text(title,
-            style: textStyle15),
+            style: textStyle15Black),
         onTap: () =>  onTap,
       ),
     );
