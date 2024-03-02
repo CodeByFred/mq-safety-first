@@ -4,20 +4,17 @@ import 'package:flutter/material.dart';
 
 import 'package:flic_button/flic_button.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
-import 'package:mq_safety_first/config/text_styling_15.dart';
+import 'package:mq_safety_first/config/text_styling_size.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-// flic2 starts and isn't scanning
-bool _isScanning = false;
 
-// as we discover buttons, lets add them to a map of uuid/button to show
-Flic2Button? _buttonsFound;
 
-// the last click to show we are hearing
-Flic2ButtonClick? _lastClick;
-
-// the plugin manager to use while we are active
-FlicButtonPlugin? flicButtonManager;
+class ButtonListener with Flic2Listener {
+  @override
+  void onButtonClicked(Flic2ButtonClick buttonClick) {
+    print('button ${buttonClick.button.uuid} clicked');
+  }
+}
 
 class MyAppFlic extends StatefulWidget {
   const MyAppFlic({super.key});
@@ -27,11 +24,23 @@ class MyAppFlic extends StatefulWidget {
 }
 
 class MyAppState extends State<MyAppFlic> with Flic2Listener {
+
+  // flic2 starts and isn't scanning
+  bool _isScanning = false;
+
+// as we discover buttons, lets add them to a map of uuid/button to show
+  Flic2Button? buttonsFound;
+
+// the last click to show we are hearing
+  Flic2ButtonClick? _lastClick;
+
+// the plugin manager to use while we are active
+  FlicButtonPlugin? flicButtonManager;
+
   @override
   void initState() {
-    getPermissions();
-
     super.initState();
+    getPermissions();
   }
 
   void getPermissions() async {
@@ -98,10 +107,17 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
     // as buttons are discovered via the various methods, add them
     // to the map to show them in the list on the view
     setState(() {
+
+
+
       // add the button to the map
-      _buttonsFound = button;
+      buttonsFound = button;
       // and listen to the button for clicks and things
       flicButtonManager?.listenToFlic2Button(button.uuid);
+
+      if(button.connectionState == Flic2ButtonConnectionState.disconnected) {
+        flicButtonManager?.connectButton(button.uuid);
+      }
     });
   }
 
@@ -126,7 +142,10 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
     //     // button was removed
         setState(() {
           // remove from the list
-          _buttonsFound = null;
+          print('Button set to null');
+          buttonsFound = null;
+          // flicButtonManager?.disconnectButton(button.uuid);
+          flicButtonManager!.forgetButton(button.uuid);
         });
     //   }
     // });
@@ -145,7 +164,7 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                 height: 350,
                 child: Column(
                   children: [
-                    if (_buttonsFound == null)
+                    if (buttonsFound == null)
                       Padding(
                         padding: const EdgeInsets.only(top: 15, bottom: 30),
                         child: ElevatedButton(
@@ -157,28 +176,26 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                                 backgroundColor: brightRed),
                             onPressed: () {
                               // create the FLIC 2 manager and initialize it
-
                               _startStopFlic2();
                               if (flicButtonManager == null) {
                                 flicButtonManager?.scanForFlic2();
                               }
-                              // _lastClick = null;
                               _startStopScanningForFlic2();
                             },
                             child: Text(
                               _isScanning ? 'Stop Scanning' : 'Pair Button',
-                              style: textStyle15,
+                              style: textStyle15Black,
                             )),
                       ),
 
-                    if (_isScanning && _buttonsFound == null)
+                    if (_isScanning && buttonsFound == null)
                       const Text(
                           textAlign: TextAlign.center,
                           'Hold down button for about 10 seconds or until it appears\n',
-                          style: textStyle15),
+                          style: textStyle15Black),
                     // and show the list of buttons we have found at this point
 
-                    if(_buttonsFound != null)
+                    if(buttonsFound != null)
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Card(
@@ -188,10 +205,10 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                           tileColor: white,
                           leading: const Icon(Icons.radio_button_on, size: 48),
                           title: Text(
-                            '${_buttonsFound!.buttonAddr}\n'
-                            'battery: (${_buttonsFound!.battPercentage}%)\n'
-                            'serial: ${_buttonsFound!.serialNo}\n',
-                            style: textStyle15,
+                            '${buttonsFound!.buttonAddr}\n'
+                            'battery: (${buttonsFound!.battPercentage}%)\n'
+                            'serial: ${buttonsFound!.serialNo}\n',
+                            style: textStyle15Black,
                           ),
                           subtitle: ElevatedButton(
                             style: ElevatedButton.styleFrom(
@@ -203,38 +220,38 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                             onPressed: () {
                               // _getButtons();
                               // _connectDisconnectButton(_buttonsFound!);
-                              // _forgetButton(_buttonsFound!);
-                              _buttonsFound = null;
+                              _forgetButton(buttonsFound!);
+                              // buttonsFound = null;
                               _startStopScanningForFlic2();
                               // flicButtonManager = null;
                               print('Unpair selected');
                             },
                             child: const Text(
                               'Unpair',
-                              style: textStyle15,
+                              style: textStyle15Black,
                             ),
                           ),
                         ),
                       ),
                     ),
 
-                    if (_buttonsFound != null)
+                    if (buttonsFound != null)
                       const Text(
                         'To test: single click, double click or hold:\n',
-                        style: textStyle15,
+                        style: textStyle15Black,
                       ),
 
-                    if (null != _lastClick && _buttonsFound != null)
+                    if (null != _lastClick && buttonsFound != null)
                       Text(
                         '${_lastClick!.isSingleClick ? 'single click\n' : ''}'
                         '${_lastClick!.isDoubleClick ? 'double click\n' : ''}'
                         '${_lastClick!.isHold ? 'hold\n' : ''}',
-                        style: textStyle15,
+                        style: textStyle15Black,
                       )
                     else
                       const Text(
                         ' \n',
-                        style: textStyle15,
+                        style: textStyle15Black,
                       ),
 
 
@@ -250,13 +267,15 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                       foregroundColor: white,
                       backgroundColor: brightRed),
                   onPressed: () {
+                    if(_isScanning) {
                     _startStopScanningForFlic2();
+                    }
                     // _lastClick = null;
                     Navigator.pop(context);
                   },
                   child: const Text(
                     'Close',
-                    style: textStyle15,
+                    style: textStyle15Black,
                   ),
                 ),
               ),
@@ -270,11 +289,13 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
   @override
   void onButtonClicked(Flic2ButtonClick buttonClick) {
     // callback from the plugin that someone just clicked a button
-    print(
-      '${buttonClick.isSingleClick ? 'single click\n' : ''}'
-      '${buttonClick.isDoubleClick ? 'double click\n' : ''}'
-      '${buttonClick.isHold ? 'hold\n' : ''}',
-    );
+    if(buttonClick.isSingleClick)
+      print('single click');
+     else if(buttonClick.isDoubleClick)
+       print('double click');
+     else
+        print('hold');
+
     setState(() {
       _lastClick = buttonClick;
     });
