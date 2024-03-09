@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
@@ -69,4 +70,37 @@ class StateManager extends StatelessWidget {
       },
     );
   }
+}
+
+class GlobalVariables {
+  // Private constructor
+  GlobalVariables._privateConstructor();
+
+  // Static private instance
+  static final GlobalVariables _instance =
+      GlobalVariables._privateConstructor();
+
+  // Public factory method to access the instance
+  factory GlobalVariables() {
+    return _instance;
+  }
+
+  String userName = FirebaseAuth.instance.currentUser!.displayName!;
+
+  String userPhone = '';
+  String building = '';
+  String labType = '';
+  String activityName = '';
+  // role can be optional as it is a dropdown option and can be undefined
+  String? role;
+  String buddyPhone = '';
+  String buddyEmail = '';
+  bool? notifyCampusSecurity;
+  Duration? checkInDuration;
+  Duration? sessionDuration;
+
+  bool selectedBluetooth = false;
+  bool isSelectedSound = false;
+  bool isSelectedVibrate = false;
+  bool isSelectedCampusSecurity = false;
 }

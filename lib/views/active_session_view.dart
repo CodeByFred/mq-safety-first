@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/config/image_constants.dart';
 import 'package:mq_safety_first/config/text_styling_size.dart';
+import 'package:mq_safety_first/main.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/timers/check_in_timer.dart';
 import 'package:mq_safety_first/timers/session_timer.dart';
@@ -55,32 +56,63 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                             color: black, blurRadius: 4, offset: Offset(0, 1))
                       ],
                     ),
-                    child: const Column(
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'Activity Name: ',
-                              style: textStyle20Black,
+                            padding: const EdgeInsets.only(left: 5),
+                            child: RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                    text: 'Building: ',
+                                    style: textStyle20Black,
+                                  ),
+                                  TextSpan(
+                                    text: GlobalVariables().building, // Your formatted time here
+                                    style: textStyle20Green, // Specific style for the time
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                    text: 'Lab Type: ',
+                                    style: textStyle20Black,
+                                  ),
+                                  TextSpan(
+                                    text: GlobalVariables().labType, // Your formatted time here
+                                    style: textStyle20Green, // Specific style for the time
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'Lab Type:',
-                              style: textStyle20Black,
+                            padding: const EdgeInsets.only(left: 5),
+                            child: RichText(
+                              text: TextSpan(
+                                children: <TextSpan>[
+                                  const TextSpan(
+                                    text: 'Activity Name: ',
+                                    style: textStyle20Black,
+                                  ),
+                                  TextSpan(
+                                    text: GlobalVariables().activityName, // Your formatted time here
+                                    style: textStyle20Green, // Specific style for the time
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 5),
-                            child: Text(
-                              'Building:',
-                              style: textStyle20Black,
-                            ),
-                          ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsets.only(left: 5),
                             child: SessionTimer(),
                           ),

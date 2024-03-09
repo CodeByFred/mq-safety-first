@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flic_button/flic_button.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/config/text_styling_size.dart';
+import 'package:mq_safety_first/main.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
@@ -145,6 +146,7 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
           print('Button set to null');
           buttonsFound = null;
           // flicButtonManager?.disconnectButton(button.uuid);
+          GlobalVariables().selectedBluetooth = false;
           flicButtonManager!.forgetButton(button.uuid);
         });
     //   }
@@ -184,7 +186,7 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                             },
                             child: Text(
                               _isScanning ? 'Stop Scanning' : 'Pair Button',
-                              style: textStyle15Black,
+                              style: textStyle15White,
                             )),
                       ),
 
@@ -228,7 +230,7 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                             },
                             child: const Text(
                               'Unpair',
-                              style: textStyle15Black,
+                              style: textStyle15White,
                             ),
                           ),
                         ),
@@ -275,7 +277,7 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
                   },
                   child: const Text(
                     'Close',
-                    style: textStyle15Black,
+                    style: textStyle15White,
                   ),
                 ),
               ),
@@ -307,6 +309,7 @@ class MyAppState extends State<MyAppFlic> with Flic2Listener {
     // this changes the state of our list of buttons, set state for this
     setState(() {
       print('button connected');
+      GlobalVariables().selectedBluetooth = true;
     });
   }
 

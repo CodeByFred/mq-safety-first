@@ -24,7 +24,8 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.mrmalodorous.mq_safety_first"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
+//    flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {

@@ -2,15 +2,16 @@ import 'package:duration_picker/duration_picker.dart';
 import 'package:flic_button/flic_button.dart';
 import 'package:flutter/material.dart';
 import 'package:mq_safety_first/config/text_styling_size.dart';
+import 'package:mq_safety_first/main.dart';
 import 'package:mq_safety_first/templates/floating_top_left_button.dart';
 import 'package:mq_safety_first/templates/large_bottom_button.dart';
 import 'package:mq_safety_first/flic2/flic_methods.dart';
+import 'package:mq_safety_first/timers/check_in_timer.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../config/color_constants.dart';
 import '../config/image_constants.dart';
 import '../config/text_constants.dart';
-import '../timers/check_in_timer.dart';
 import '../timers/session_timer.dart';
 
 class SettingsView extends StatefulWidget {
@@ -31,15 +32,41 @@ final MaterialStateProperty<Icon?> thumbIcon =
 );
 
 class _SettingsViewState extends State<SettingsView> {
-  final Duration _duration = const Duration(hours: 0, minutes: 0);
+  late final TextEditingController _buddyPhone;
+  late final TextEditingController _buddyEmail;
+  final FocusNode _buddyPhoneFocusNode = FocusNode();
+  final FocusNode _buddyEmailFocusNode = FocusNode();
 
-  bool _selectedBluetooth = false;
-  String? _selectedValueDropDownRole;
-  bool _isSelectedSound = false;
-  bool _isSelectedVibrate = false;
-  bool _isSelectedCampusSecurity = false;
+  @override
+  void initState() {
+    super.initState();
+    _buddyPhone = TextEditingController();
+    _buddyEmail = TextEditingController();
+    _buddyPhoneFocusNode.addListener(_onBuddyPhoneFocusChange);
+    _buddyEmailFocusNode.addListener(_onBuddyEmailFocusChange);
+  }
 
-  IconData? get leadingIcon => null;
+  void _onBuddyPhoneFocusChange() {
+    if (!_buddyPhoneFocusNode.hasFocus) {
+      // TextField has lost focus, indicating the user has tapped outside or closed the keyboard
+      // Store the current value of the TextField into a variable
+      setState(() {
+        GlobalVariables().buddyPhone = _buddyPhone.text;
+      });
+      print("Stored input: ${GlobalVariables().buddyPhone}");
+    }
+  }
+
+  void _onBuddyEmailFocusChange() {
+    if (!_buddyEmailFocusNode.hasFocus) {
+      // TextField has lost focus, indicating the user has tapped outside or closed the keyboard
+      // Store the current value of the TextField into a variable
+      setState(() {
+        GlobalVariables().buddyEmail = _buddyEmail.text;
+      });
+      print("Stored input: ${GlobalVariables().buddyEmail}");
+    }
+  }
 
   void handleTap() async {
     bool isGranted = await Permission.bluetooth.request().isGranted &&
@@ -74,6 +101,9 @@ class _SettingsViewState extends State<SettingsView> {
     Size screenSize = MediaQuery.of(context).size;
     double height = screenSize.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      // Prevents Scaffold from resizing when the keyboard appears
+
       body: Stack(children: [
         FloatingTopLeftButton(
           icon: Icons.arrow_back,
@@ -104,58 +134,44 @@ class _SettingsViewState extends State<SettingsView> {
                     ),
                     // EDGE INSETS NEEDS FIXING!!! THIS WILL NOT WORK ON EVERY PHONE
                     child: ListView(
-                        padding: const EdgeInsets.fromLTRB(20, 10, 20, 5),
+                        padding: const EdgeInsets.fromLTRB(20, 5, 20, 5),
                         children: <Widget>[
                           Card(
                             elevation: 10,
                             shadowColor: black,
                             child: ListTile(
                               dense: true,
-                              // minVerticalPadding: 20,
                               tileColor: white,
-                              title:
-                                  const Text('Role', style: textStyle15Black),
-                              trailing: DropdownButton<String>(
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedValueDropDownRole = newValue;
-                                  });
-                                },
-                                hint: const Text('Select Role',
-                                    style: textStyle15Black),
-                                value: _selectedValueDropDownRole,
-                                items: [
-                                  'Undergraduate',
-                                  'Postgraduate',
-                                  'Employee'
-                                ].map((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value, style: textStyle15Black),
-                                  );
-                                }).toList(),
+                              leading: const Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Icon(Icons.badge_outlined),
+                              ),
+                              trailing: Padding(
+                                padding: const EdgeInsets.only(right: 85),
+                                child: DropdownButton<String>(
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      GlobalVariables().role = newValue;
+                                    });
+                                  },
+                                  // isExpanded: true,
+                                  hint: const Text('Select Role',
+                                      style: textStyle15Black),
+                                  value: GlobalVariables().role,
+                                  items: [
+                                    'Undergraduate',
+                                    'Postgraduate',
+                                    'Employee'
+                                  ].map((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child:
+                                          Text(value, style: textStyle15Black),
+                                    );
+                                  }).toList(),
+                                ),
                               ),
                             ),
-                          ),
-                          const Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                                dense: true,
-                                tileColor: white,
-                                trailing: Icon(Icons.phone),
-                                title: Text('Buddy Phone',
-                                    style: textStyle15Black)),
-                          ),
-                          const Card(
-                            elevation: 10,
-                            shadowColor: black,
-                            child: ListTile(
-                                dense: true,
-                                tileColor: white,
-                                trailing: Icon(Icons.email),
-                                title: Text('Buddy Email',
-                                    style: textStyle15Black)),
                           ),
                           Card(
                             elevation: 10,
@@ -163,18 +179,31 @@ class _SettingsViewState extends State<SettingsView> {
                             child: ListTile(
                                 dense: true,
                                 tileColor: white,
-                                title: const Text('Notify Campus Security',
-                                    style: textStyle15Black),
-                                trailing: Switch(
-                                  inactiveThumbColor: black,
-                                  inactiveTrackColor: white,
-                                  thumbIcon: thumbIcon,
-                                  value: _isSelectedCampusSecurity,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      _isSelectedCampusSecurity = value;
-                                    });
-                                  },
+                                leading: const Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child: Icon(Icons.contact_phone_outlined),
+                                ),
+                                trailing: SizedBox(
+                                  width: 230,
+                                  // alignment: Alignment.centerRight,
+                                  child: TextField(
+                                    controller: _buddyPhone,
+                                    focusNode: _buddyPhoneFocusNode,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
+                                    keyboardType: TextInputType.number,
+                                    // textAlign: TextAlign.right,
+                                    style: textStyle15Black,
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        hintText: GlobalVariables()
+                                                .buddyPhone
+                                                .isNotEmpty
+                                            ? GlobalVariables().buddyPhone
+                                            : 'Buddy Phone',
+                                        border: InputBorder.none,
+                                        hintStyle: textStyle15Black),
+                                  ),
                                 )),
                           ),
                           Card(
@@ -183,61 +212,32 @@ class _SettingsViewState extends State<SettingsView> {
                               child: ListTile(
                                 dense: true,
                                 tileColor: white,
-                                title: const Text('Check-in Frequency',
-                                    style: textStyle15Black),
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext dialogContext) {
-                                      // Use dialogContext to differentiate it from the widget tree context
-                                      Duration localDuration =
-                                          _duration; // Make a local copy of _duration to use within the dialog
-                                      return Dialog(
-                                        child: StatefulBuilder(
-                                          // Introduce StatefulBuilder here
-                                          builder: (BuildContext context,
-                                              StateSetter setState) {
-                                            // This setState is local to the StatefulBuilder's scope
-                                            return DurationPicker(
-                                              height: 500,
-                                              width: 500,
-                                              duration: localDuration,
-                                              // Use localDuration inside the dialog
-                                              onChange: (val) {
-                                                setState(() {
-                                                  // Check if the total minutes exceed 60
-                                                  if (val.inMinutes > 60) {
-                                                    // If it exceeds 60 minutes, calculate the remainder of minutes after dividing by 60
-                                                    int temp =
-                                                        val.inMinutes % 60;
-                                                    Duration tempDuration =
-                                                        Duration(minutes: temp);
-                                                    localDuration =
-                                                        tempDuration;
-                                                  } else {
-                                                    localDuration = val;
-                                                  }
-                                                });
-
-                                                // Convert the selected/adjusted duration to seconds
-                                                int durationInSeconds =
-                                                    localDuration.inSeconds;
-
-                                                // Pass the seconds to the CountdownTimerManager
-                                                CheckInTimerManager.setTimer(
-                                                    durationInSeconds);
-
-                                                // If you want to update the main state _duration when dialog is still open, do it here as well
-                                                // Note: This will not re-render the main widget until the dialog is closed
-                                              },
-                                              snapToMins: 5,
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
+                                leading: const Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child: Icon(Icons.contact_mail_outlined),
+                                ),
+                                trailing: SizedBox(
+                                  width: 230,
+                                  // alignment: Alignment.centerRight,
+                                  child: TextField(
+                                    controller: _buddyEmail,
+                                    focusNode: _buddyEmailFocusNode,
+                                    enableSuggestions: false,
+                                    autocorrect: false,
+                                    keyboardType: TextInputType.emailAddress,
+                                    // textAlign: TextAlign.right,
+                                    style: textStyle15Black,
+                                    decoration: InputDecoration(
+                                        isDense: true,
+                                        hintText: GlobalVariables()
+                                                .buddyEmail
+                                                .isNotEmpty
+                                            ? GlobalVariables().buddyEmail
+                                            : 'Buddy Email',
+                                        border: InputBorder.none,
+                                        hintStyle: textStyle15Black),
+                                  ),
+                                ),
                               )),
                           Card(
                             elevation: 10,
@@ -245,8 +245,81 @@ class _SettingsViewState extends State<SettingsView> {
                             child: ListTile(
                                 dense: true,
                                 tileColor: white,
-                                title: const Text('Change Session Length',
-                                    style: textStyle15Black),
+                                title: Transform.translate(
+                                  offset: const Offset(-25, 0),
+                                  child: const Text('Notify Campus Security',
+                                      style: textStyle15Black),
+                                ),
+                                leading: Transform.translate(
+                                  offset: const Offset(-15, 0),
+                                  child: Switch(
+                                    inactiveThumbColor: black,
+                                    inactiveTrackColor: white,
+                                    thumbIcon: thumbIcon,
+                                    value: GlobalVariables()
+                                        .isSelectedCampusSecurity,
+                                    onChanged: (bool value) {
+                                      setState(() {
+                                        GlobalVariables()
+                                            .isSelectedCampusSecurity = value;
+                                      });
+                                    },
+                                  ),
+                                )),
+                          ),
+                          Card(
+                              elevation: 10,
+                              shadowColor: black,
+                              child: ListTile(
+                                  dense: true,
+                                  tileColor: white,
+                                  leading: const Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Icon(
+                                        Icons.notifications_active_outlined),
+                                  ),
+                                  title:
+                                      GlobalVariables().checkInDuration != null
+                                          ? Text(
+                                              'Check-in Frequency: ${GlobalVariables().checkInDuration!.inHours.toString().padLeft(2, '0')}:${(GlobalVariables().checkInDuration!.inMinutes % 60).toString().padLeft(2, '0')}',
+                                              style: textStyle15Black,
+                                            )
+                                          : const Text('Check-in Frequency',
+                                              style: textStyle15Black),
+                                  onTap: () async {
+                                    var resultingDuration =
+                                        await showDurationPicker(
+                                      context: context,
+                                      initialTime: const Duration(minutes: 15),
+                                    );
+                                    setState(() {
+                                      GlobalVariables().checkInDuration =
+                                          resultingDuration;
+                                    });
+                                    CheckInTimerManager.setTimer(
+                                        GlobalVariables()
+                                            .checkInDuration!
+                                            .inSeconds);
+                                  })),
+                          Card(
+                            elevation: 10,
+                            shadowColor: black,
+                            child: ListTile(
+                                dense: true,
+                                tileColor: white,
+                                leading: const Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child: Icon(
+                                    Icons.update,
+                                  ),
+                                ),
+                                title: GlobalVariables().sessionDuration != null
+                                    ? Text(
+                                        'Session Length: ${GlobalVariables().sessionDuration!.inHours.toString().padLeft(2, '0')}:${(GlobalVariables().sessionDuration!.inMinutes % 60).toString().padLeft(2, '0')}',
+                                        style: textStyle15Black,
+                                      )
+                                    : const Text('Change Session Length',
+                                        style: textStyle15Black),
                                 onTap: () async {
                                   final now = DateTime.now();
                                   final pickedTime = await showTimePicker(
@@ -266,13 +339,15 @@ class _SettingsViewState extends State<SettingsView> {
                                             ? todayPickedDateTime
                                                 .add(const Duration(days: 1))
                                             : todayPickedDateTime;
-                                    final durationInSeconds = futureDateTime
-                                        .difference(now)
-                                        .inSeconds;
 
-                                    // Send this duration to your CountdownTimerManager
+                                    setState(() {
+                                      GlobalVariables().sessionDuration =
+                                          futureDateTime.difference(now);
+                                    });
                                     SessionTimerManager.setTimer(
-                                        durationInSeconds);
+                                        GlobalVariables()
+                                            .sessionDuration!
+                                            .inSeconds);
                                   }
                                 }),
                           ),
@@ -280,13 +355,17 @@ class _SettingsViewState extends State<SettingsView> {
                             elevation: 10,
                             shadowColor: black,
                             child: ListTile(
-                                onTap: () =>
-                                    Navigator.pushNamed(context, '/history'),
-                                dense: true,
-                                tileColor: white,
-                                title: const Text('View History',
-                                    style: textStyle15Black),
-                                trailing: const Icon(Icons.chevron_right)),
+                              onTap: () =>
+                                  Navigator.pushNamed(context, '/history'),
+                              dense: true,
+                              tileColor: white,
+                              title: const Text('View History',
+                                  style: textStyle15Black),
+                              leading: const Padding(
+                                padding: EdgeInsets.only(right: 10),
+                                child: Icon(Icons.search),
+                              ),
+                            ),
                           ),
                           Card(
                             elevation: 10,
@@ -296,18 +375,16 @@ class _SettingsViewState extends State<SettingsView> {
                               tileColor: white,
                               title: const Text('Pair Bluetooth Button',
                                   style: textStyle15Black),
-                              trailing: Icon(
-                                Icons.bluetooth,
-                                color: Colors.blue,
+                              leading: Padding(
+                                padding: const EdgeInsets.only(right: 10),
+                                child: Icon(
+                                  Icons.bluetooth,
+                                  color: GlobalVariables().selectedBluetooth
+                                      ? Colors.blue
+                                      : black,
+                                ),
                               ),
-                              // (buttonsFound != null) ? Colors.blue : null),
                               onTap: () async {
-                                // handleTap();
-
-                                // setState(() {
-                                //   buttonsFound;
-                                // });
-
                                 showDialog(
                                   context: context,
                                   builder: (context) => const Dialog(
@@ -326,44 +403,56 @@ class _SettingsViewState extends State<SettingsView> {
                                 leading: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    const Text('Sound',
-                                        style: textStyle15Black),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
+                                    Transform.translate(
+                                      offset: const Offset(-15, 0),
                                       child: Switch(
                                         inactiveThumbColor: black,
                                         inactiveTrackColor: white,
                                         thumbIcon: thumbIcon,
-                                        value: _isSelectedSound,
+                                        value:
+                                            GlobalVariables().isSelectedSound,
                                         onChanged: (bool value) {
                                           setState(() {
-                                            _isSelectedSound = value;
+                                            GlobalVariables().isSelectedSound =
+                                                value;
                                           });
                                         },
                                       ),
+                                    ),
+                                    Transform.translate(
+                                      offset: const Offset(-10, 0),
+                                      child: const Text('Sound',
+                                          style: textStyle15Black),
                                     ),
                                   ],
                                 ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Text('Vibrate',
-                                        style: textStyle15Black),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 15),
-                                      child: Switch(
+                                trailing: Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Switch(
                                         inactiveThumbColor: black,
                                         inactiveTrackColor: white,
                                         thumbIcon: thumbIcon,
-                                        value: _isSelectedVibrate,
+                                        value:
+                                            GlobalVariables().isSelectedVibrate,
                                         onChanged: (bool value) {
                                           setState(() {
-                                            _isSelectedVibrate = value;
+                                            GlobalVariables()
+                                                .notifyCampusSecurity = value;
+                                            GlobalVariables()
+                                                .isSelectedVibrate = value;
                                           });
                                         },
                                       ),
-                                    ),
-                                  ],
+                                      const Padding(
+                                        padding: EdgeInsets.only(left: 5),
+                                        child: Text('Vibrate',
+                                            style: textStyle15Black),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )),
                           Card(
@@ -376,7 +465,10 @@ class _SettingsViewState extends State<SettingsView> {
                                 tileColor: white,
                                 title: const Text('Report Issue',
                                     style: textStyle15Black),
-                                trailing: const Icon(Icons.flag)),
+                                leading: const Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child: Icon(Icons.flag_outlined),
+                                )),
                           ),
                         ]),
                   ),
@@ -385,10 +477,16 @@ class _SettingsViewState extends State<SettingsView> {
             ],
           ),
         ),
-        LargeBottomButton(
+        Positioned(
+          bottom: 40,
+          left: 0,
+          right: 0,
+          child: LargeBottomButton(
             buttonTitle: logOut,
             onPressedLBB: () => Navigator.pushNamedAndRemoveUntil(
-                context, '/welcome', (route) => false))
+                context, '/welcome', (route) => false),
+          ),
+        )
       ]),
     );
   }
