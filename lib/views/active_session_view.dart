@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mq_safety_first/cloud/cloud_methods.dart';
 import 'package:mq_safety_first/config/color_constants.dart';
 import 'package:mq_safety_first/config/image_constants.dart';
 import 'package:mq_safety_first/config/text_styling_size.dart';
@@ -122,7 +123,8 @@ class _ActiveSessionViewState extends State<ActiveSessionView> {
                     padding: const EdgeInsets.only(top: 40),
                     child: ElevatedButton(
                         onPressed: () {
-                          null;
+                          FirebaseCloudStorage().sendSms();
+                          FirebaseCloudStorage().sendEmail();
                         },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: brightRed,

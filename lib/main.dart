@@ -86,6 +86,7 @@ class GlobalVariables {
   }
 
   String userName = FirebaseAuth.instance.currentUser!.displayName!;
+  String userID = FirebaseAuth.instance.currentUser!.uid;
 
   String userPhone = '';
   String building = '';

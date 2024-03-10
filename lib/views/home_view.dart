@@ -118,7 +118,7 @@ class _HomeViewState extends State<HomeView> {
                     // WILL THIS WORK FOR EVERY PHONE?
                     padding: const EdgeInsets.fromLTRB(20, 165, 20, 0),
                     child: SizedBox(
-                      width: width * .65,
+                      width: width * .7,
                       height: height / 8,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
